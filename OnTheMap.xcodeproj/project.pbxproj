@@ -19,6 +19,8 @@
 		3AA8D60E1CDC5E8500FAF1B4 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8D60A1CDC5E8500FAF1B4 /* ListViewController.swift */; };
 		3AA8D60F1CDC5E8500FAF1B4 /* LocationPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8D60B1CDC5E8500FAF1B4 /* LocationPromptViewController.swift */; };
 		3AA8D6101CDC5E8500FAF1B4 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8D60C1CDC5E8500FAF1B4 /* MapViewController.swift */; };
+		D2FF30E91CDCE0570029606D /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FF30E81CDCE0570029606D /* APIClient.swift */; };
+		D2FF30EB1CDCEFE70029606D /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FF30EA1CDCEFE70029606D /* APIConstants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		3AA8D60A1CDC5E8500FAF1B4 /* ListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		3AA8D60B1CDC5E8500FAF1B4 /* LocationPromptViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPromptViewController.swift; sourceTree = "<group>"; };
 		3AA8D60C1CDC5E8500FAF1B4 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		D2FF30E81CDCE0570029606D /* APIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		D2FF30EA1CDCEFE70029606D /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +109,8 @@
 			children = (
 				3AA8D6041CDC4D8A00FAF1B4 /* Parse */,
 				3AA8D6031CDC4D8200FAF1B4 /* Udacity */,
+				D2FF30E81CDCE0570029606D /* APIClient.swift */,
+				D2FF30EA1CDCEFE70029606D /* APIConstants.swift */,
 			);
 			name = Clients;
 			sourceTree = "<group>";
@@ -198,8 +204,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				3AA8D6061CDC4DC400FAF1B4 /* UdacityClient.swift in Sources */,
+				D2FF30EB1CDCEFE70029606D /* APIConstants.swift in Sources */,
 				3AA8D5E71CDC199C00FAF1B4 /* LoginViewController.swift in Sources */,
 				3AA8D60E1CDC5E8500FAF1B4 /* ListViewController.swift in Sources */,
+				D2FF30E91CDCE0570029606D /* APIClient.swift in Sources */,
 				3AA8D6101CDC5E8500FAF1B4 /* MapViewController.swift in Sources */,
 				3AA8D6081CDC599800FAF1B4 /* UdacityConstants.swift in Sources */,
 				3AA8D60D1CDC5E8500FAF1B4 /* LinkPromptViewController.swift in Sources */,
@@ -321,6 +329,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = OnTheMap/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.montalto.OnTheMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -335,6 +344,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = OnTheMap/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.montalto.OnTheMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";

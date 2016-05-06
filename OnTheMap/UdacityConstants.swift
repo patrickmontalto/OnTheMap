@@ -20,13 +20,31 @@ extension UdacityClient {
         static let ApiScheme = "https"
         static let ApiHost = "udacity.com"
         static let ApiPath = "/api"
+        
+        static let ClientType = APIClient.Constants.UdacityClient
     }
     
-    // MARK: - Methods
+    
+    // MARK: - API Methods
     struct Methods {
         
         // MARK: Authentication
-        static let AuthenticationSessionNew = "/session"
+        static let AuthenticationSession = "/session"
+        
+        // MARK: Get Public User Data
+        static let PublicUserData = "/users"
+    }
+    
+    // MARK: - HTTP Header Keys
+    struct HTTPHeaderKeys {
+        static let Accept = "Accept"
+        static let ContentType = "Content-Type"
+        static let XSRFToken = "X-XSRF-TOKEN"
+    }
+    
+    // MARK: - HTTP Headers Values
+    struct HTTPHeaderValues {
+        static let ApplicationJSON = "application/json"
     }
     
     // MARK: - JSON Body Keys
@@ -45,6 +63,7 @@ extension UdacityClient {
         // MARK: - Authorization
         static let Account = "account"
         static let Registered = "registered"
+        static let UserID = "key"
         static let Session = "session"
         static let SessionID = "id"
     }

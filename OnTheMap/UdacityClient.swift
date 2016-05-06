@@ -11,20 +11,65 @@ import Foundation
 
 // MARK: - UdacityClient: NSObject 
 
-class UdacityClient: NSObject {
+class UdacityClient {
     
     // MARK: - Properties
-    
-    // shared session
-    var session = NSURLSession.sharedSession()
+    let apiClient: APIClient
     
     // authentication state
     var sessionID: String? = nil
     var userID: Int? = nil
     
-//    func taskForPOSTMethod(method: String, var parameters: [String:AnyObject], completionHandlerForGET: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
-//        
-//        /* 1. Set the parameters */
-//        
-//    }
+    // MARK: - Initializer
+    private init() {
+        apiClient = APIClient.sharedInstance()
+    }
+    
+    // MARK: - Declare Singleton
+    
+    private static let sharedInstance = UdacityClient()
+    
+    class func sharedSession() -> NSURLSession {
+        return sharedInstance.apiClient.session
+    }
+    
+    // MARK: - Authenticate
+    func authenticateWithUdacity(username: String, password: String, completionHandlerForAuth: (success: Bool, errorString: String?) -> Void) {
+        
+        // Build JSON body
+        let jsonBody = "{\"udacity\": {\"\(JSONBodyKeys.Username)\": \"\(username)\", \"\(JSONBodyKeys.Password)\": \"\(password)\"}}".dataUsingEncoding(NSUTF8StringEncoding)
+        
+        // Build HTTP headers
+        let headers = [HTTPHeaderKeys.Accept: HTTPHeaderValues.ApplicationJSON, HTTPHeaderKeys.ContentType: HTTPHeaderValues.ApplicationJSON]
+        
+        // Build request
+        let request = APIClient.sharedInstance().buildRequestWithHTTPMethod(APIClient.Constants.POST, method: Methods.AuthenticationSession, jsonBody: jsonBody, headers: headers, parameters: nil, clientType: Constants.ClientType)
+        
+        // Get session ID
+        getSessionID(request) { (success, sessionID, errorString) in
+            if success {
+                // Store the sessionID upon success!
+                self.sessionID = sessionID
+            }
+            completionHandlerForAuth(success: success, errorString: errorString)
+        }
+    }
+    
+    // MARK: - Get Session ID
+    func getSessionID(request: NSURLRequest, completionHandlerForSessionID: (success: Bool, sessionID: String?, errorString: String?) -> Void) {
+        
+        // Make the request
+        APIClient.sharedInstance().taskForRequest(request, clientType: Constants.ClientType) { (results, error) in
+            
+            /* check for error */
+            if let error = error {
+                print(error)
+                completionHandlerForSessionID(success: false, sessionID: nil, errorString: "Login failed (session ID)")
+            } else {
+                /* GUARD: Is there a username key in the */
+            }
+            
+        }
+    }
+    
 }
