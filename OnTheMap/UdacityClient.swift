@@ -86,7 +86,7 @@ class UdacityClient: NSObject {
     }
     
     // MARK: - Get Session ID
-    func getSessionID(request: NSURLRequest, completionHandlerForSessionID: (success: Bool, userKey:String?, sessionID: String?, errorString: String?) -> Void) {
+    private func getSessionID(request: NSURLRequest, completionHandlerForSessionID: (success: Bool, userKey:String?, sessionID: String?, errorString: String?) -> Void) {
         
         // Make the request
         APIClient().taskForRequest(request, clientType: Constants.ClientType) { (results, error) in
@@ -111,7 +111,7 @@ class UdacityClient: NSObject {
     }
     
     // MARK: - Logout Request
-    func deleteSession(request: NSURLRequest, completionHandlerForLogout: (success: Bool, errorString: String?) -> Void) {
+    private func deleteSession(request: NSURLRequest, completionHandlerForLogout: (success: Bool, errorString: String?) -> Void) {
         
         // Make the request
         APIClient().taskForRequest(request, clientType: Constants.ClientType) { (results, error) -> Void in

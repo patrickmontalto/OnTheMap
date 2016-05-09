@@ -22,6 +22,8 @@
 		D2FF30E91CDCE0570029606D /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FF30E81CDCE0570029606D /* APIClient.swift */; };
 		D2FF30EB1CDCEFE70029606D /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FF30EA1CDCEFE70029606D /* APIConstants.swift */; };
 		D2FF30ED1CE107EF0029606D /* OTMTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FF30EC1CE107EF0029606D /* OTMTabBarController.swift */; };
+		D2FF30EF1CE123370029606D /* ParseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FF30EE1CE123370029606D /* ParseClient.swift */; };
+		D2FF30F11CE1240A0029606D /* ParseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FF30F01CE1240A0029606D /* ParseConstants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +44,8 @@
 		D2FF30E81CDCE0570029606D /* APIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		D2FF30EA1CDCEFE70029606D /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
 		D2FF30EC1CE107EF0029606D /* OTMTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMTabBarController.swift; sourceTree = "<group>"; };
+		D2FF30EE1CE123370029606D /* ParseClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseClient.swift; sourceTree = "<group>"; };
+		D2FF30F01CE1240A0029606D /* ParseConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseConstants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +134,8 @@
 		3AA8D6041CDC4D8A00FAF1B4 /* Parse */ = {
 			isa = PBXGroup;
 			children = (
+				D2FF30EE1CE123370029606D /* ParseClient.swift */,
+				D2FF30F01CE1240A0029606D /* ParseConstants.swift */,
 			);
 			name = Parse;
 			sourceTree = "<group>";
@@ -218,6 +224,8 @@
 				3AA8D5E51CDC199C00FAF1B4 /* AppDelegate.swift in Sources */,
 				3AA8D6011CDC4D4C00FAF1B4 /* GCDBlackBox.swift in Sources */,
 				3AA8D60F1CDC5E8500FAF1B4 /* LocationPromptViewController.swift in Sources */,
+				D2FF30EF1CE123370029606D /* ParseClient.swift in Sources */,
+				D2FF30F11CE1240A0029606D /* ParseConstants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

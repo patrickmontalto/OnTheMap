@@ -152,7 +152,7 @@
         <!--Item-->
         <scene sceneID="8p1-H4-Oei">
             <objects>
-                <viewController id="QeX-dp-GnG" sceneMemberID="viewController">
+                <viewController id="QeX-dp-GnG" customClass="MapViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="iAP-dt-Tu6"/>
                         <viewControllerLayoutGuide type="bottom" id="bAW-rn-E7I"/>
@@ -160,10 +160,27 @@
                     <view key="view" contentMode="scaleToFill" id="pML-6n-rsj">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="iFy-IJ-JBe">
+                                <rect key="frame" x="0.0" y="64" width="600" height="487"/>
+                                <connections>
+                                    <outlet property="delegate" destination="QeX-dp-GnG" id="KAW-bX-3lT"/>
+                                </connections>
+                            </mapView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="iFy-IJ-JBe" firstAttribute="leading" secondItem="pML-6n-rsj" secondAttribute="leading" id="0Zr-ca-fM4"/>
+                            <constraint firstAttribute="trailing" secondItem="iFy-IJ-JBe" secondAttribute="trailing" id="Ne2-dp-Mw4"/>
+                            <constraint firstItem="bAW-rn-E7I" firstAttribute="top" secondItem="iFy-IJ-JBe" secondAttribute="bottom" id="a4Z-vb-f7v"/>
+                            <constraint firstItem="iFy-IJ-JBe" firstAttribute="top" secondItem="iAP-dt-Tu6" secondAttribute="bottom" id="sKW-QP-2Bn"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="WcW-MM-3y0"/>
                     <navigationItem key="navigationItem" id="7s9-Sv-Dm8"/>
+                    <connections>
+                        <outlet property="mapView" destination="iFy-IJ-JBe" id="VvX-dd-CNd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ULQ-dD-7Mw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -190,7 +207,7 @@
         <!--Item-->
         <scene sceneID="csG-3S-zDP">
             <objects>
-                <tableViewController id="gqd-o4-974" sceneMemberID="viewController">
+                <tableViewController id="gqd-o4-974" customClass="ListViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="SBw-Sg-lk1">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
