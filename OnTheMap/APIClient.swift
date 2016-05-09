@@ -11,27 +11,17 @@ import Foundation
 class APIClient {
     
     // MARK: - Properties
-    let session: NSURLSession!
-    
-    // MARK: - Initializer
-    private init() {
-        self.session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-    }
-    // MARK: - Declare Singleton
-    private static let sharedClient = APIClient()
-    
-    class func sharedInstance() -> APIClient {
-        return sharedClient
-    }
+    var session = NSURLSession.sharedSession()
     
     // MARK: - Create Request
-    func buildRequestWithHTTPMethod(HTTPMethod: String, method: String, jsonBody: NSData? = nil, headers: [String:String]? = nil, parameters: [String:AnyObject]?, clientType: String) -> NSURLRequest {
+    func buildRequestWithHTTPMethod(HTTPMethod: String, method: String, jsonBody: String? = nil, headers: [String:String]? = nil, parameters: [String:AnyObject]?, clientType: String) -> NSURLRequest {
         
         /* 1. Set the parameters so they can be appended to if necessary */
         let methodParameters = parameters
         
         /* 2. Build the URL, Configure the request */
-        let request =  NSMutableURLRequest(URL: URLFromParameters(methodParameters, withPathExtension: method, clientType: clientType))
+        var request = //NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
+        NSMutableURLRequest(URL: URLFromParameters(methodParameters, withPathExtension: method, clientType: clientType))
         
         /* 3. Build the method, headers, and body */
         request.HTTPMethod = HTTPMethod
@@ -45,7 +35,7 @@ class APIClient {
         
         // check for jsonBody
         if let jsonBody = jsonBody {
-            request.HTTPBody = jsonBody
+            request.HTTPBody = jsonBody.dataUsingEncoding(NSUTF8StringEncoding)
         }
         
         return request
@@ -57,23 +47,32 @@ class APIClient {
         /* 4. Make the task from request */
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
             
-            // TODO: Create function for SendError
+            // MARK: - Error reporting function
+            func sendError(error: String) {
+                print(error)
+                let userInfo = [NSLocalizedDescriptionKey : error]
+                completionHandlerForGET(result: nil, error: NSError(domain: "taskForGETMethod", code: 1, userInfo: userInfo))
+            }
             
             /* GUARD: Was there an error? */
             guard (error == nil) else {
                 // TODO: Display Error "There was an error with your request: \(error)"
+                /* GUARD: Did the API return an error response key? */
+                sendError("There was an error with your request:\(error)")
                 return
             }
             
             /* GUARD: Did we get a successful 2XX response? */
             guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
                 // TODO: Display Error "Your request returned a status code other than 2xx!"
+                sendError("Your request returned a status code other than 2xx")
                 return
             }
             
             /* GUARD: Was there any data returned ? */
             guard var data = data else {
                 // TODO: Display Error "No data was returned by the request!"
+                print("No data returned!")
                 return
             }
             
@@ -84,6 +83,7 @@ class APIClient {
             }
             
             /* 5. Parse the data and use the data (in the completion handler) */
+            print(NSString(data: data, encoding: NSUTF8StringEncoding))
             self.parseDataWithCompletionHandler(data, completionHandlerForParsedData: completionHandlerForGET)
         }
         /* 6. Start the request */
@@ -103,7 +103,6 @@ class APIClient {
             components.scheme = UdacityClient.Constants.ApiScheme
             components.host = UdacityClient.Constants.ApiHost
             components.path = UdacityClient.Constants.ApiPath + (withPathExtension ?? "")
-            components.queryItems = [NSURLQueryItem]()
             
             // Add parameters if present
             if let parameters = parameters {

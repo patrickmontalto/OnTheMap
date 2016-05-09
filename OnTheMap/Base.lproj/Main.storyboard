@@ -110,39 +110,46 @@
         <!--Tab Bar Controller-->
         <scene sceneID="R48-3V-Vv1">
             <objects>
-                <tabBarController id="J25-Mt-nJX" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="OTMTabBarController" id="J25-Mt-nJX" customClass="OTMTabBarController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="oBC-RJ-DBA">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="SU7-r2-MM8">
+                            <connections>
+                                <action selector="logout:" destination="J25-Mt-nJX" id="YPx-Lq-6NC"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="qWj-pc-OE9">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="P2N-rv-j9c" kind="relationship" relationship="viewControllers" id="Rpl-SM-hLe"/>
-                        <segue destination="fp8-Lt-BTN" kind="relationship" relationship="viewControllers" id="7n9-Vf-64Y"/>
+                        <segue destination="QeX-dp-GnG" kind="relationship" relationship="viewControllers" id="VQJ-Z0-4Hr"/>
+                        <segue destination="gqd-o4-974" kind="relationship" relationship="viewControllers" id="Prt-my-7Ph"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jeE-A2-Uaf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="868" y="407"/>
+            <point key="canvasLocation" x="1552" y="445"/>
         </scene>
         <!--Item-->
         <scene sceneID="Brr-lb-roB">
             <objects>
-                <navigationController id="P2N-rv-j9c" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="OTMNavigationController" id="P2N-rv-j9c" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="uCl-6m-dbs"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="6o8-qO-zal">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="QeX-dp-GnG" kind="relationship" relationship="rootViewController" id="9jT-XM-BdQ"/>
+                        <segue destination="J25-Mt-nJX" kind="relationship" relationship="rootViewController" id="Kmz-fG-WPR"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="igZ-EH-hbE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1672" y="75"/>
+            <point key="canvasLocation" x="860" y="445"/>
         </scene>
-        <!--View Controller-->
+        <!--Item-->
         <scene sceneID="8p1-H4-Oei">
             <objects>
                 <viewController id="QeX-dp-GnG" sceneMemberID="viewController">
@@ -155,6 +162,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="WcW-MM-3y0"/>
                     <navigationItem key="navigationItem" id="7s9-Sv-Dm8"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ULQ-dD-7Mw" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -179,7 +187,7 @@
             </objects>
             <point key="canvasLocation" x="3187" y="387"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Item-->
         <scene sceneID="csG-3S-zDP">
             <objects>
                 <tableViewController id="gqd-o4-974" sceneMemberID="viewController">
@@ -202,28 +210,12 @@
                             <outlet property="delegate" destination="gqd-o4-974" id="3O5-rf-Beo"/>
                         </connections>
                     </tableView>
+                    <tabBarItem key="tabBarItem" title="Item" id="VuW-GH-eo7"/>
                     <navigationItem key="navigationItem" id="qb5-CO-m3h"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fQe-dr-a9r" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2381" y="752"/>
-        </scene>
-        <!--Item-->
-        <scene sceneID="Vgy-BN-qbz">
-            <objects>
-                <navigationController id="fp8-Lt-BTN" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="KSF-J1-RWS"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="qmS-Pi-whp">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="gqd-o4-974" kind="relationship" relationship="rootViewController" id="4Cj-LN-qNC"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7G9-s4-1Aw" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1666" y="747"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="c6E-Pn-rZJ">

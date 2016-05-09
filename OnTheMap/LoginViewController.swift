@@ -29,19 +29,23 @@ class LoginViewController: UIViewController {
             alertForInvalidCredentials()
             return
         }
-        
-        let clientType = APIClient.Constants.UdacityClient
-        
-        // Create request
-        let request = APIClient.sharedInstance().buildRequestWithHTTPMethod(APIClient.Constants.POST, method: UdacityClient.Methods.AuthenticationSession, parameters: nil, clientType: clientType)
-        
         // Authenticate
+        UdacityClient.sharedInstance().authenticateWithUdacity(username, password: password) { (success, errorString) -> Void in
+            if success {
+                print("Returned success.")
+                self.completeLogin()
+            } else {
+                self.alertForInvalidCredentials()
+            }
+        }
+        
         
 //        let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
 //        request.HTTPMethod = "POST"
 //        request.setValue("application/json", forHTTPHeaderField: "Accept")
 //        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 //        request.HTTPBody = "{\"udacity\": {\"username\": \"\(username)\", \"password\": \"\(password)\"}}".dataUsingEncoding(NSUTF8StringEncoding)
+//        print(request)
 //        let session = NSURLSession.sharedSession()
 //        let task = session.dataTaskWithRequest(request) { data, response, error in
 //            if error != nil { // Handle error…
@@ -54,13 +58,22 @@ class LoginViewController: UIViewController {
 //        task.resume()
     }
     
+    // MARK: - Login
+    private func completeLogin() {
+        let controller = storyboard!.instantiateViewControllerWithIdentifier("OTMNavigationController") as! UINavigationController
+        NSOperationQueue.mainQueue().addOperationWithBlock({
+            self.presentViewController(controller, animated: true, completion: nil)})
+    }
+    
     
     func alertForInvalidCredentials() {
-        let alert = UIAlertController(title: "Oops", message: "Invalid username or password.", preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            let alert = UIAlertController(title: "Oops", message: "Invalid username or password.", preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
     }
-
+    
 }
 
 // TODO: Implement UITextFieldDelegate (for keyboard in text fields)
