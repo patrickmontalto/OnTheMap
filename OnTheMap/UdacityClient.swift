@@ -14,9 +14,11 @@ import Foundation
 class UdacityClient: NSObject {
     
     // MARK: - Properties
+    
     // authentication state
     var sessionID: String? = nil
     var userKey: Int? = nil
+    var student: Student? = nil
     
     // MARK: - Initializers
     override init() {
@@ -50,9 +52,22 @@ class UdacityClient: NSObject {
                     // Store the sessionID and userKey upon success!
                     self.sessionID = sessionID
                     self.userKey = Int(userKey)
+                    
+                    // Get user name
+                    self.getStudentDetails() { (success, fullName, errorString) in
+                        if success {
+                            // Create and store student
+                            if let fullName = fullName {
+                                self.student = Student(fullName: fullName, uniqueKey: userKey)
+                            }
+                            print(self.student!.fullName)
+                        }
+                        completionHandlerForAuth(success: success, errorString: errorString)
+                    }
                 }
+            } else {
+                completionHandlerForAuth(success: success, errorString: errorString)
             }
-            completionHandlerForAuth(success: success, errorString: errorString)
         }
     }
     
@@ -110,13 +125,52 @@ class UdacityClient: NSObject {
         }
     }
     
+    // MARK: - Get Student Details
+    private func getStudentDetails(completionHandlerForStudentDetails: (success: Bool, fullName: String?, errorString: String?) -> Void) {
+        
+        /* GUARD: is there a userKey stored? */
+        guard let userKey = self.userKey else {
+            completionHandlerForStudentDetails(success: false, fullName: nil, errorString: "Error: No user key stored for current user!")
+            return
+        }
+        
+        // Build method
+        let method = Methods.CurrentUserData + "/\(userKey)"
+        
+        // Build request
+        let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.GET, method: method, jsonBody: nil, headers: nil, parameters: nil, clientType: Constants.ClientType)
+        
+        // Make the request
+        APIClient().taskForRequest(request, clientType: Constants.ClientType) { (results, error) -> Void in
+            /* GUARD: check for error */
+            guard error == nil else {
+                completionHandlerForStudentDetails(success: false, fullName: nil, errorString: "An error occurred getting student details.")
+                return
+            }
+            
+            /* GUARD: is there a user key in the result? */
+            guard let user = results[JSONResponseKeys.User] as? [String:AnyObject] else {
+                completionHandlerForStudentDetails(success: false, fullName: nil, errorString: "An error occurred getting student details (No user key).")
+                return
+            }
+            
+            /* GUARD: is there a first name and last name ? */
+            guard let firstName = user[JSONResponseKeys.FirstName] as? String, let lastName = user[JSONResponseKeys.LastName] as? String else {
+                completionHandlerForStudentDetails(success: false, fullName: nil, errorString: "An error occurred getting student name (no first or last name).")
+                return
+            }
+            
+            completionHandlerForStudentDetails(success: true, fullName: "\(firstName) \(lastName)", errorString: nil)
+        }
+    }
+    
     // MARK: - Logout Request
     private func deleteSession(request: NSURLRequest, completionHandlerForLogout: (success: Bool, errorString: String?) -> Void) {
         
         // Make the request
         APIClient().taskForRequest(request, clientType: Constants.ClientType) { (results, error) -> Void in
             
-            /* check for error */
+            /* GUARD: check for error */
             guard error == nil else {
                 completionHandlerForLogout(success: false, errorString: "An error occurred logging out of Udacity.")
                 return

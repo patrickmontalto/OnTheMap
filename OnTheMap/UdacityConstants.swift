@@ -32,7 +32,7 @@ extension UdacityClient {
         static let AuthenticationSession = "/session"
         
         // MARK: Get Public User Data
-        static let PublicUserData = "/users"
+        static let CurrentUserData = "/users"
     }
     
     // MARK: - HTTP Header Keys
@@ -66,6 +66,11 @@ extension UdacityClient {
         static let UserKey = "key"
         static let Session = "session"
         static let SessionID = "id"
+        
+        // MARK: - Student Details
+        static let User = "user"
+        static let FirstName = "first_name"
+        static let LastName = "last_name"
     }
     
     // MARK: - JSON Response Values

@@ -5,6 +5,7 @@
 //  Created by Patrick Montalto on 5/9/16.
 //  Copyright © 2016 swift. All rights reserved.
 //
+import Foundation
 
 class OTMDataSource {
     
@@ -12,6 +13,7 @@ class OTMDataSource {
     
     // Shared model
     var locations = [Location]()
+    
     
     // MARK: - Singleton
     class func sharedDataSource() -> OTMDataSource {
@@ -21,9 +23,17 @@ class OTMDataSource {
         return Singleton.sharedInstance
     }
     
-    func getStudentLocationData(completionHandler: (success: Bool, errorString: String?) -> Void) {
+    func getStudentLocationData() {
         ParseClient.sharedInstance().retrieveLocations { (success, errorString) in
-            completionHandler(success: success, errorString: errorString)
+            if success {
+                self.sendNotification("studentLocationsSuccess")
+            } else {
+                self.sendNotification("studentLocationsError")
+            }
         }
+    }
+    
+    private func sendNotification(notificationName: String) {
+        NSNotificationCenter.defaultCenter().postNotificationName(notificationName, object: nil)
     }
 }

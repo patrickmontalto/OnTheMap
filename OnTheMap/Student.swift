@@ -14,11 +14,7 @@ struct Student {
     
     // MARK: Properties
     
-    let firstName: String
-    let lastName: String
+    let fullName: String
     let uniqueKey: String
-    var fullName: String {
-        return "\(firstName) \(lastName)"
-    }
-    var location: Location
+
 }

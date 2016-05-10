@@ -14,24 +14,16 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(true)
-        // Initialize empty annotations array
-        var annotations = [MKPointAnnotation]()
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "studentLocationsDidUpdate", name: "studentLocationsSuccess", object: nil)
         
         // Populate annotations array and update MapView annotations
-        OTMDataSource.sharedDataSource().getStudentLocationData { (success, errorString) in
-            if success {
-                self.updateStudentLocationPins()
-            } else {
-                // TODO: Display error: Unable to update map
-                print("Error: unable to update map")
-            }
-        }
+        OTMDataSource.sharedDataSource().getStudentLocationData()
         
     }
-    
-    func updateStudentLocationPins() {
+
+    func studentLocationsDidUpdate() {
         // create array of MKPointAnnotations
         var annotations = [MKPointAnnotation]()
         

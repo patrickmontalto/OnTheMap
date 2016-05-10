@@ -18,7 +18,7 @@ class APIClient {
         
         /* 1. Set the parameters so they can be appended to if necessary */
         let methodParameters = parameters
-        
+
         /* 2. Build the URL, Configure the request */
         var request = //NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
         NSMutableURLRequest(URL: URLFromParameters(methodParameters, withPathExtension: method, clientType: clientType))
