@@ -16,20 +16,48 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
-        // set locations
+        // Initialize empty annotations array
+        var annotations = [MKPointAnnotation]()
+        
+        // Populate annotations array and update MapView annotations
+        OTMDataSource.sharedDataSource().getStudentLocationData { (success, errorString) in
+            if success {
+                self.updateStudentLocationPins()
+            } else {
+                // TODO: Display error: Unable to update map
+                print("Error: unable to update map")
+            }
+        }
+        
+    }
+    
+    func updateStudentLocationPins() {
         // create array of MKPointAnnotations
         var annotations = [MKPointAnnotation]()
         
         // for each dictionary in locations:
-        // set lat, long
+        let locations = OTMDataSource.sharedDataSource().locations
         
-        // set coordinate
-        // set student name, lastname, and mediaURL
-        
-        // Create Annotation and append to annotations array
-        
-        // once the array is complete, add annotations to map:
-        self.mapView.addAnnotations(annotations)
+        for location in locations {
+            let lat = CLLocationDegrees(location.latitude)
+            let long = CLLocationDegrees(location.longitude)
+            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+            
+            // Create annotation and set its coordinate, title, and subtitle
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
+            annotation.title = location.fullName
+            annotation.subtitle = location.mediaURL
+            
+            // append to annotations array
+            annotations.append(annotation)
+        }
+
+        // once the array is complete, remove old annotations and add new annotations to map:
+        performUIUpdatesOnMain {
+            self.mapView.removeAnnotations(self.mapView.annotations)
+            self.mapView.addAnnotations(annotations)
+        }
     }
     
     // MARK: - MKMapViewDelegate
@@ -63,6 +91,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.sharedApplication()
             if let toOpen = view.annotation?.subtitle! {
+                // TODO: Display "Invalid URL" for invalid URLs
                 app.openURL(NSURL(string: toOpen)!)
             }
         }

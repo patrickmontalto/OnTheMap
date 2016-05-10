@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
         <!--Login View Controller-->
@@ -107,16 +108,20 @@
             </objects>
             <point key="canvasLocation" x="304.5" y="429.5"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--On The Map-->
         <scene sceneID="R48-3V-Vv1">
             <objects>
                 <tabBarController storyboardIdentifier="OTMTabBarController" id="J25-Mt-nJX" customClass="OTMTabBarController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="oBC-RJ-DBA">
+                    <navigationItem key="navigationItem" title="On The Map" id="oBC-RJ-DBA">
                         <barButtonItem key="leftBarButtonItem" title="Logout" id="SU7-r2-MM8">
                             <connections>
                                 <action selector="logout:" destination="J25-Mt-nJX" id="YPx-Lq-6NC"/>
                             </connections>
                         </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="refresh" id="ptb-Oe-lso"/>
+                            <barButtonItem image="pin" id="8Ef-rF-7DS"/>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="qWj-pc-OE9">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
@@ -149,7 +154,7 @@
             </objects>
             <point key="canvasLocation" x="860" y="445"/>
         </scene>
-        <!--Item-->
+        <!--Map-->
         <scene sceneID="8p1-H4-Oei">
             <objects>
                 <viewController id="QeX-dp-GnG" customClass="MapViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
@@ -176,7 +181,7 @@
                             <constraint firstItem="iFy-IJ-JBe" firstAttribute="top" secondItem="iAP-dt-Tu6" secondAttribute="bottom" id="sKW-QP-2Bn"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="WcW-MM-3y0"/>
+                    <tabBarItem key="tabBarItem" title="Map" image="map" selectedImage="map" id="WcW-MM-3y0"/>
                     <navigationItem key="navigationItem" id="7s9-Sv-Dm8"/>
                     <connections>
                         <outlet property="mapView" destination="iFy-IJ-JBe" id="VvX-dd-CNd"/>
@@ -204,7 +209,7 @@
             </objects>
             <point key="canvasLocation" x="3187" y="387"/>
         </scene>
-        <!--Item-->
+        <!--List-->
         <scene sceneID="csG-3S-zDP">
             <objects>
                 <tableViewController id="gqd-o4-974" customClass="ListViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
@@ -227,7 +232,7 @@
                             <outlet property="delegate" destination="gqd-o4-974" id="3O5-rf-Beo"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Item" id="VuW-GH-eo7"/>
+                    <tabBarItem key="tabBarItem" title="List" image="list" selectedImage="list" id="VuW-GH-eo7"/>
                     <navigationItem key="navigationItem" id="qb5-CO-m3h"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fQe-dr-a9r" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -254,6 +259,9 @@
         </scene>
     </scenes>
     <resources>
+        <image name="list" width="32" height="32"/>
+        <image name="map" width="32" height="32"/>
         <image name="onthemap" width="512" height="416"/>
+        <image name="pin" width="32" height="32"/>
     </resources>
 </document>

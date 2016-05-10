@@ -116,7 +116,21 @@ class APIClient {
             
         // check for ParseClient type
         } else if clientType == APIClient.Constants.ParseClient {
-            // TODO: Set client to ParseClient.self
+            let components = NSURLComponents()
+            components.scheme = ParseClient.Constants.ApiScheme
+            components.host = ParseClient.Constants.ApiHost
+            components.path = ParseClient.Constants.ApiPath + (withPathExtension ?? "")
+            
+            // Add parameters if present
+            if let parameters = parameters {
+                for (key, value) in parameters {
+                    let queryItem = NSURLQueryItem(name: key, value: "\(value)")
+                    components.queryItems!.append(queryItem)
+                }
+            }
+            
+            return components.URL!
+            
         }
         
         // TODO: display error for wrong client type sent to function
