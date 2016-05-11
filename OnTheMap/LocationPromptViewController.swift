@@ -12,7 +12,7 @@ import MapKit
 class LocationPromptViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet var locationTextView: UITextField!
-    @IBOutlet var navBar: UINavigationBar!
+    //@IBOutlet var navBar: UINavigationBar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +20,13 @@ class LocationPromptViewController: UIViewController, UITextFieldDelegate {
         removeNavigationbarBorder()
         // Set delegate for text field
         locationTextView.delegate = self
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        // set Navbar colors
+        setNavbarColors(self, barColor: OTMConstants.GreyColor, textColor: OTMConstants.BlueColor)
+
     }
     
     @IBAction func cancelPrompt(sender: AnyObject) {
@@ -59,17 +66,22 @@ class LocationPromptViewController: UIViewController, UITextFieldDelegate {
         
     }
     
+    private func setNavbarColors(controller: UIViewController, barColor: UIColor, textColor: UIColor) {
+        controller.navigationController?.navigationBar.barTintColor = barColor
+        controller.navigationController?.navigationBar.tintColor = textColor
+        
+    }
+    
     private func displayLinkPrompt(location: CLPlacemark) {
         // Instantiate link prompt, set the location, and present it
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("LinkPrompt") as! LinkPromptViewController
         controller.locationPlacemark = location
         navigationController?.pushViewController(controller, animated: true)
-        //presentViewController(controller, animated: true, completion: nil)
     }
     
     
     private func removeNavigationbarBorder() {
-        for parent in navBar.subviews {
+        for parent in (self.navigationController?.navigationBar.subviews)! {
             for childView in parent.subviews {
                 if(childView is UIImageView) {
                     childView.removeFromSuperview()

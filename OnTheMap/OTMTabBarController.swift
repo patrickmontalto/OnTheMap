@@ -55,8 +55,10 @@ class OTMTabBarController: UITabBarController {
     
     // MARK: Present location prompt
     private func displayLocationPrompt() {
-        let locationPromptViewController = self.storyboard?.instantiateViewControllerWithIdentifier("LocationPrompt") as! LocationPromptViewController
-        self.presentViewController(locationPromptViewController, animated: true, completion: nil)
+        let studentLocationNavigationController = self.storyboard?.instantiateViewControllerWithIdentifier("StudentLocationNavigationController") as! UINavigationController
+        self.presentViewController(studentLocationNavigationController, animated: true, completion: nil)
+//        let locationPromptViewController = self.storyboard?.instantiateViewControllerWithIdentifier("LocationPrompt") as! LocationPromptViewController
+//        self.presentViewController(locationPromptViewController, animated: true, completion: nil)
     }
     // MARK: - Alerts
     

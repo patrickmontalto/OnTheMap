@@ -15,7 +15,7 @@ class LinkPromptViewController: UIViewController, MKMapViewDelegate, UITextField
     
     @IBOutlet var linkTextField: UITextField!
     @IBOutlet var mapView: MKMapView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         let annotation = MKPlacemark(placemark: locationPlacemark)
@@ -23,8 +23,16 @@ class LinkPromptViewController: UIViewController, MKMapViewDelegate, UITextField
         linkTextField.delegate = self
     }
     
-    @IBAction func cancelPrompt(sender: AnyObject) {
-        dismissViewControllerAnimated(true, completion: nil)
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        setNavbarColors(self, barColor: OTMConstants.BlueColor, textColor: OTMConstants.GreyColor)
+    }
+    
+    /* TEMPORARY: Listener for backbutton */
+    override func willMoveToParentViewController(parent: UIViewController?) {
+        if parent == nil {
+            setNavbarColors(self.parentViewController!, barColor: OTMConstants.GreyColor, textColor: OTMConstants.BlueColor)
+        }
     }
     
     @IBAction func submitStudentLocation(sender: AnyObject) {
@@ -78,6 +86,11 @@ class LinkPromptViewController: UIViewController, MKMapViewDelegate, UITextField
         return true
     }
     
+    private func setNavbarColors(controller: UIViewController, barColor: UIColor, textColor: UIColor) {
+        controller.navigationController?.navigationBar.barTintColor = barColor
+        controller.navigationController?.navigationBar.tintColor = textColor
+        
+    }
     // MARK: Completion handler for student location
     private func completionHandlerForStudentLocation(success: Bool, errorString: String?) {
         performUIUpdatesOnMain() {
@@ -98,7 +111,6 @@ class LinkPromptViewController: UIViewController, MKMapViewDelegate, UITextField
             let alert = UIAlertController(title: "", message: message, preferredStyle: .Alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: completionHandler))
             self.presentingViewController!.presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
-            //self.presentViewController(alert, animated: true, completion: nil)
         }
     }
 }
