@@ -20,7 +20,7 @@ class ListViewController: UITableViewController {
         tableView.delegate = self
         
         // Observer for refresh button on student locations
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListViewController.studentLocationsDidUpdate), name: "studentLocationsSuccess", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "studentLocationsDidUpdate", name: "studentLocationsSuccess", object: nil)
     }
     
     // MARK: - tableView methods

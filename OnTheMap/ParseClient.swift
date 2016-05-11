@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import MapKit
 
 // MARK: - ParseClient: NSObject
 
@@ -44,20 +45,108 @@ class ParseClient: NSObject {
         }
     }
     
+    // MARK: - Submit Student Location
+    func submitStudentLocation(student: Student, location: CLLocation, mapString: String, mediaURL: String, completionHandlerForSubmitLocation: (success: Bool, errorString: String?) -> Void) {
+        let firstName = student.firstName
+        let lastName = student.lastName
+        let uniqueKey = student.uniqueKey
+        let latitude = location.coordinate.latitude
+        let longitude = location.coordinate.longitude
+        
+        // Build headers
+        let headers = [HTTPHeaderKeys.ParseApplicationID: Constants.ApplicationID, HTTPHeaderKeys.ParseAPIKey: Constants.APIKey, HTTPHeaderKeys.ContentType: HTTPHeaderValues.ApplicationJSON]
+        
+        // Build jsonBody
+        let jsonBody = "{\"\(JSONKeys.UniqueKey)\": \"\(uniqueKey)\", \"\(JSONKeys.FirstName)\": \"\(firstName)\", \"\(JSONKeys.LastName)\": \"\(lastName)\",\"\(JSONKeys.MapString)\": \"\(mapString)\", \"\(JSONKeys.MediaURL)\": \"\(mediaURL)\",\"\(JSONKeys.Latitude)\": \(latitude), \"\(JSONKeys.Longitude)\": \(longitude)}"
+        
+        // Build request
+        let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.POST, method: Methods.StudentLocation, jsonBody: jsonBody, headers: headers, parameters: nil, clientType: Constants.ClientType)
+        
+        // POST location
+        postLocation(request) { (success, errorString) in
+            completionHandlerForSubmitLocation(success: success, errorString: errorString)
+        }
+
+    }
+    
+    // MARK: - Update Student Location
+    func updateStudentLocation(student: Student, location: CLLocation, mapString: String, mediaURL: String, objectID: String, completionHandlerForUpdateLocation: (success: Bool, errorString: String?) -> Void) {
+        let firstName = student.firstName
+        let lastName = student.lastName
+        let uniqueKey = student.uniqueKey
+        let latitude = location.coordinate.latitude
+        let longitude = location.coordinate.longitude
+        
+        // Build headers
+        let headers = [HTTPHeaderKeys.ParseApplicationID: Constants.ApplicationID, HTTPHeaderKeys.ParseAPIKey: Constants.APIKey, HTTPHeaderKeys.ContentType: HTTPHeaderValues.ApplicationJSON]
+        
+        // Build jsonBody
+        let jsonBody = "{\"\(JSONKeys.UniqueKey)\": \"\(uniqueKey)\", \"\(JSONKeys.FirstName)\": \"\(firstName)\", \"\(JSONKeys.LastName)\": \"\(lastName)\",\"\(JSONKeys.MapString)\": \"\(mapString)\", \"\(JSONKeys.MediaURL)\": \"\(mediaURL)\",\"\(JSONKeys.Latitude)\": \(latitude), \"\(JSONKeys.Longitude)\": \(longitude)}"
+        
+        // Build request
+        let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.PUT, method: Methods.StudentLocation + "/\(objectID)", jsonBody: jsonBody, headers: headers, parameters: nil, clientType: Constants.ClientType)
+        /* DEBUGGING */
+        print(request.URL!)
+        
+        // PUT Location
+        putLocation(request) { (success, errorString) -> Void in
+            completionHandlerForUpdateLocation(success: success, errorString: errorString)
+        }
+    }
+    
+    // MARK: - POST Location
+    private func postLocation(request: NSURLRequest, completionHandlerForPostLocation: (success: Bool, errorString: String?) -> Void) {
+        APIClient().taskForRequest(request, clientType: Constants.ClientType) { (results, error) -> Void in
+            /* Check for error */
+            guard error == nil else {
+                completionHandlerForPostLocation(success: false, errorString: "An error occurred posting location.")
+                return
+            }
+            /* Check objectID key */
+            guard let objectID = results[JSONKeys.ObjectID] as? String else {
+                completionHandlerForPostLocation(success: false, errorString: "An error occurred posting location (Object ID).")
+                return
+            }
+            completionHandlerForPostLocation(success: true,  errorString: nil)
+            
+        }
+    }
+    
+    // MARK: - PUT Location
+    private func putLocation(request: NSURLRequest, completionHandlerForPostLocation: (success: Bool, errorString: String?) -> Void) {
+        APIClient().taskForRequest(request, clientType: Constants.ClientType) { (results, error) -> Void in
+            /* Check for error */
+            guard error == nil else {
+                completionHandlerForPostLocation(success: false, errorString: "An error occurred updating location.")
+                return
+            }
+            /* Check for updatedAt key */
+            guard let _ = results[JSONKeys.UpdatedAt] else {
+                completionHandlerForPostLocation(success: false, errorString: "An error occurred updating location (updatedAt key not found).")
+                return
+            }
+            completionHandlerForPostLocation(success: true,  errorString: nil)
+            
+        }
+    }
+    
+    
     // MARK: - GET Locations
     private func getLocations(request: NSURLRequest, completionHandlerForGetLocations: (success: Bool, locations: [Location]?, errorString: String?) -> Void) {
         APIClient().taskForRequest(request, clientType: Constants.ClientType) { (results, error) in
 
             /* check for error */
             guard error == nil else {
-                completionHandlerForGetLocations(success: false, locations: nil, errorString: "An error occured getting student locations.")
+                completionHandlerForGetLocations(success: false, locations: nil, errorString: "An error occurred getting student locations.")
                 return
             }
+            
             /* check for results */
             guard let locationsArray = results[JSONKeys.Results] as? [[String:AnyObject]] else {
                 completionHandlerForGetLocations(success: false, locations: nil, errorString: "An error occured getting student locations (no results key found).")
                 return
             }
+            
             /* iterate through locations array */
             var locations = [Location]()
             
@@ -95,7 +184,7 @@ class ParseClient: NSObject {
                 let location = Location(latitude: latitude, longitude: longitude, mapString: mapString, mediaURL: mediaURL, objectID: objectID, firstName: firstName, lastName: lastName, uniqueKey: uniqueKey)
                 
                 // Check to see if the current location is that of the current student
-                if uniqueKey == OTMDataSource.sharedDataSource().student!.uniqueKey {
+                if let currentStudent = OTMDataSource.sharedDataSource().student where uniqueKey == currentStudent.uniqueKey {
                     locations.insert(location, atIndex: 0)
                     // Set location for current student in Data Source
                     OTMDataSource.sharedDataSource().location = location
@@ -103,6 +192,7 @@ class ParseClient: NSObject {
                     locations.append(location)
                 }
             }
+            
             completionHandlerForGetLocations(success: true, locations: locations, errorString: nil)
         }
     }

@@ -18,7 +18,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MapViewController.studentLocationsDidUpdate), name: "studentLocationsSuccess", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "studentLocationsDidUpdate", name: "studentLocationsSuccess", object: nil)
         
         // Populate annotations array and update MapView annotations
         OTMDataSource.sharedDataSource().getStudentLocationData()

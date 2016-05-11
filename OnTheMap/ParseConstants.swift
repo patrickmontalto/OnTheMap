@@ -51,7 +51,9 @@ extension ParseClient {
         static let MapString = "mapString"
         static let MediaURL = "mediaURL"
         static let UniqueKey = "uniqueKey"
-        static let ObjectID = "objectID"
+        static let ObjectID = "objectId"
+        static let CreatedAt = "createdAt"
+        static let UpdatedAt = "updatedAt"
     }
     
 

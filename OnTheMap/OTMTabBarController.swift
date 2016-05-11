@@ -11,7 +11,7 @@ import UIKit
 class OTMTabBarController: UITabBarController {
     
     override func viewDidLoad() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(OTMTabBarController.studentLocationsDidError), name: "studentLocationsError", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "studentLocationsDidError", name: "studentLocationsError", object: nil)
     }
     
     @IBAction func logout(sender: AnyObject) {

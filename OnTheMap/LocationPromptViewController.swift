@@ -62,8 +62,9 @@ class LocationPromptViewController: UIViewController, UITextFieldDelegate {
     private func displayLinkPrompt(location: CLPlacemark) {
         // Instantiate link prompt, set the location, and present it
         let controller = self.storyboard?.instantiateViewControllerWithIdentifier("LinkPrompt") as! LinkPromptViewController
-        controller.location = location
-        presentViewController(controller, animated: true, completion: nil)
+        controller.locationPlacemark = location
+        navigationController?.pushViewController(controller, animated: true)
+        //presentViewController(controller, animated: true, completion: nil)
     }
     
     
