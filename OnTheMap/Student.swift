@@ -13,8 +13,15 @@ import Foundation
 struct Student {
     
     // MARK: Properties
-    
-    let fullName: String
+    let firstName: String
+    let lastName: String
+    var fullName: String {
+        return "\(firstName) \(lastName)"
+    }
     let uniqueKey: String
-
+    
+    func hasStoredLocation() -> Bool {
+        let userKeys = OTMDataSource.sharedDataSource().locations.map() { $0.uniqueKey }
+        return userKeys.contains(self.uniqueKey)
+    }
 }

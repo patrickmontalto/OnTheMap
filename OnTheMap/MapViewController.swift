@@ -10,24 +10,28 @@
 import UIKit
 import MapKit
 
+// MARK: - MapViewController: UIViewController, MKMapViewDelegate
+
 class MapViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "studentLocationsDidUpdate", name: "studentLocationsSuccess", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MapViewController.studentLocationsDidUpdate), name: "studentLocationsSuccess", object: nil)
         
         // Populate annotations array and update MapView annotations
         OTMDataSource.sharedDataSource().getStudentLocationData()
         
     }
-
+    
+    // MARK: - Call this function when student locations are refreshed.
+    
     func studentLocationsDidUpdate() {
-        // create array of MKPointAnnotations
+        // Create array of MKPointAnnotations
         var annotations = [MKPointAnnotation]()
         
-        // for each dictionary in locations:
+        // For each dictionary in locations:
         let locations = OTMDataSource.sharedDataSource().locations
         
         for location in locations {
@@ -41,11 +45,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             annotation.title = location.fullName
             annotation.subtitle = location.mediaURL
             
-            // append to annotations array
+            // Append to annotations array
             annotations.append(annotation)
         }
 
-        // once the array is complete, remove old annotations and add new annotations to map:
+        // Once the array is complete, remove old annotations and add new annotations to map:
         performUIUpdatesOnMain {
             self.mapView.removeAnnotations(self.mapView.annotations)
             self.mapView.addAnnotations(annotations)
@@ -66,10 +70,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = true
-            pinView!.pinColor = .Purple
+            pinView!.pinTintColor = UIColor.purpleColor()
             pinView!.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure)
-        }
-        else {
+        } else {
             pinView!.annotation = annotation
         }
         
@@ -83,9 +86,20 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.sharedApplication()
             if let toOpen = view.annotation?.subtitle! {
-                // TODO: Display "Invalid URL" for invalid URLs
                 app.openURL(NSURL(string: toOpen)!)
+            } else {
+                displayAlert("Invalid URL")
             }
+        }
+    }
+    
+    // MARK: Display Alert
+    
+    private func displayAlert(message: String, completionHandler: ((UIAlertAction) -> Void)? = nil) {
+        dispatch_async(dispatch_get_main_queue()) {
+            let alert = UIAlertController(title: "", message: message, preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: completionHandler))
+            self.presentViewController(alert, animated: true, completion: nil)
         }
     }
 

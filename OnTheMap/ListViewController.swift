@@ -8,16 +8,22 @@
 
 import UIKit
 
+// MARK: - ListViewController: UITableViewController
+
 class ListViewController: UITableViewController {
+    
+    @IBOutlet var locationsTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
         
-        // TODO: Add observer for studentLocationsSuccess: selector studentLocationsDidUpdate to update table view
+        // Observer for refresh button on student locations
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListViewController.studentLocationsDidUpdate), name: "studentLocationsSuccess", object: nil)
     }
     
+    // MARK: - tableView methods
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return OTMDataSource.sharedDataSource().locations.count
     }
@@ -40,6 +46,11 @@ class ListViewController: UITableViewController {
                // TODO: Display Error: Unable to open URL
             }
         }
+    }
+    
+    // MARK: - Call this function when student locations are refreshed.
+    func studentLocationsDidUpdate() {
+            self.locationsTableView.reloadData()
     }
     
 }

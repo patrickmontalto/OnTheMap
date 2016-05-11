@@ -47,8 +47,7 @@ class ParseClient: NSObject {
     // MARK: - GET Locations
     private func getLocations(request: NSURLRequest, completionHandlerForGetLocations: (success: Bool, locations: [Location]?, errorString: String?) -> Void) {
         APIClient().taskForRequest(request, clientType: Constants.ClientType) { (results, error) in
-//            DEBUGGING */
-            print(results)
+
             /* check for error */
             guard error == nil else {
                 completionHandlerForGetLocations(success: false, locations: nil, errorString: "An error occured getting student locations.")
@@ -78,7 +77,12 @@ class ParseClient: NSObject {
                 }
                 
                 /* GUARD: Does the location have a unique student key? */
-                guard let uniqueKey = location[JSONKeys.uniqueKey] as? String else {
+                guard let uniqueKey = location[JSONKeys.UniqueKey] as? String else {
+                    continue
+                }
+                
+                /* GUARD: Does the location have an objectID? */
+                guard let objectID = location[JSONKeys.ObjectID] as? String else {
                     continue
                 }
                 
@@ -87,11 +91,17 @@ class ParseClient: NSObject {
                     continue
                 }
                 
-                // TODO: Add a new student ?
-                
                 // Add new location to array of locations
-                let location = Location(latitude: latitude, longitude: longitude, mapString: mapString, mediaURL: mediaURL, firstName: firstName, lastName: lastName, uniqueKey: uniqueKey)
-                locations.append(location)
+                let location = Location(latitude: latitude, longitude: longitude, mapString: mapString, mediaURL: mediaURL, objectID: objectID, firstName: firstName, lastName: lastName, uniqueKey: uniqueKey)
+                
+                // Check to see if the current location is that of the current student
+                if uniqueKey == OTMDataSource.sharedDataSource().student!.uniqueKey {
+                    locations.insert(location, atIndex: 0)
+                    // Set location for current student in Data Source
+                    OTMDataSource.sharedDataSource().location = location
+                } else {
+                    locations.append(location)
+                }
             }
             completionHandlerForGetLocations(success: true, locations: locations, errorString: nil)
         }

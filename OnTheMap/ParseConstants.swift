@@ -50,7 +50,8 @@ extension ParseClient {
         static let Longitude = "longitude"
         static let MapString = "mapString"
         static let MediaURL = "mediaURL"
-        static let uniqueKey = "uniqueKey"
+        static let UniqueKey = "uniqueKey"
+        static let ObjectID = "objectID"
     }
     
 

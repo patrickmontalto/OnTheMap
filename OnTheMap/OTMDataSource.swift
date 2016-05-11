@@ -13,7 +13,8 @@ class OTMDataSource {
     
     // Shared model
     var locations = [Location]()
-    
+    var student: Student? = nil
+    var location: Location? = nil
     
     // MARK: - Singleton
     class func sharedDataSource() -> OTMDataSource {

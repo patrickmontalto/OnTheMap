@@ -18,6 +18,7 @@ struct Location {
     let longitude: Double
     let mapString: String
     let mediaURL: String
+    let objectID: String
     
     var coordinate: CLLocationCoordinate2D {
         return CLLocationCoordinate2DMake(latitude, longitude)

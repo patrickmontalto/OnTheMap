@@ -8,14 +8,15 @@
 
 import UIKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet var usernameField: UITextField!
     @IBOutlet var passwordField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        usernameField.delegate = self
+        passwordField.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -32,30 +33,11 @@ class LoginViewController: UIViewController {
         // Authenticate
         UdacityClient.sharedInstance().authenticateWithUdacity(username, password: password) { (success, errorString) -> Void in
             if success {
-                print("Returned success.")
                 self.completeLogin()
             } else {
                 self.alertForInvalidCredentials()
             }
         }
-        
-        
-//        let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
-//        request.HTTPMethod = "POST"
-//        request.setValue("application/json", forHTTPHeaderField: "Accept")
-//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.HTTPBody = "{\"udacity\": {\"username\": \"\(username)\", \"password\": \"\(password)\"}}".dataUsingEncoding(NSUTF8StringEncoding)
-//        print(request)
-//        let session = NSURLSession.sharedSession()
-//        let task = session.dataTaskWithRequest(request) { data, response, error in
-//            if error != nil { // Handle error…
-//                return
-//            }
-//            
-//            let newData = data!.subdataWithRange(NSMakeRange(5, data!.length - 5)) /* subset response data! */
-//            print(NSString(data: newData, encoding: NSUTF8StringEncoding))
-//        }
-//        task.resume()
     }
     
     // MARK: - Login
@@ -67,14 +49,33 @@ class LoginViewController: UIViewController {
     
     
     func alertForInvalidCredentials() {
-        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+        performUIUpdatesOnMain { 
             let alert = UIAlertController(title: "Oops", message: "Invalid username or password.", preferredStyle: .Alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
         }
     }
     
+    // MARK: Textfield methods
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        if textField == passwordField {
+            loginPressed(self)
+        }
+        return true
+    }
+    
+    // MARK: Display Alert
+    
+    private func displayAlert(message: String, completionHandler: ((UIAlertAction) -> Void)? = nil) {
+        dispatch_async(dispatch_get_main_queue()) {
+            let alert = UIAlertController(title: "", message: message, preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: completionHandler))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+    }
+    
 }
 
-// TODO: Implement UITextFieldDelegate (for keyboard in text fields)
 

@@ -11,7 +11,7 @@ import UIKit
 class OTMTabBarController: UITabBarController {
     
     override func viewDidLoad() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "studentLocationsDidError", name: "studentLocationsError", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(OTMTabBarController.studentLocationsDidError), name: "studentLocationsError", object: nil)
     }
     
     @IBAction func logout(sender: AnyObject) {
@@ -22,14 +22,26 @@ class OTMTabBarController: UITabBarController {
                     self.dismissViewControllerAnimated(true, completion: nil)
                 }
             } else {
-                // TODO: Implement error handling for logout
-                print(errorString)
+                if let errorString = errorString {
+                    self.displayAlert(errorString)
+                }
             }
         }
         
     }
     @IBAction func addNew(sender: AnyObject) {
-        // TODO: Implement method to input new Location (LocationPromptViewController)
+        /* GUARD: Is there a student stored in the shared model? */
+        guard let student = OTMDataSource.sharedDataSource().student else {
+            displayAlert("Error: Current student not found")
+            return
+        }
+        performUIUpdatesOnMain() {
+            if student.hasStoredLocation() {
+                self.displayOverwriteAlert(student)
+            } else {
+                self.displayLocationPrompt()
+            }
+        }
     }
     
     @IBAction func refreshLocations(sender: AnyObject) {
@@ -37,8 +49,38 @@ class OTMTabBarController: UITabBarController {
         OTMDataSource.sharedDataSource().getStudentLocationData()
     }
     
-    private func studentLocationsDidError() {
-        // TODO: Implement UI Alert Action: "Failed to update student locations."
+    func studentLocationsDidError() {
+        displayAlert("Failed to update student locations.")
+    }
+    
+    // MARK: Present location prompt
+    private func displayLocationPrompt() {
+        let locationPromptViewController = self.storyboard?.instantiateViewControllerWithIdentifier("LocationPrompt") as! LocationPromptViewController
+        self.presentViewController(locationPromptViewController, animated: true, completion: nil)
+    }
+    // MARK: - Alerts
+    
+    // MARK: Display Overwrite Confirmation
+    private func displayOverwriteAlert(student: Student) {
+        let refreshAlert = UIAlertController(title: "", message: "\(student.fullName) has already posted a Student Location. Would you like to overwrite their location?", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        refreshAlert.addAction(UIAlertAction(title: "Overwrite", style: .Default, handler: { (action: UIAlertAction!) in
+            self.displayLocationPrompt()
+        }))
+        
+        refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
+        
+        presentViewController(refreshAlert, animated: true, completion: nil)
+    }
+    
+    // MARK: Display Alert
+    
+    private func displayAlert(message: String, completionHandler: ((UIAlertAction) -> Void)? = nil) {
+        dispatch_async(dispatch_get_main_queue()) {
+            let alert = UIAlertController(title: "", message: message, preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: completionHandler))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
     }
 }
 

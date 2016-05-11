@@ -56,23 +56,19 @@ class APIClient {
             
             /* GUARD: Was there an error? */
             guard (error == nil) else {
-                // TODO: Display Error "There was an error with your request: \(error)"
-                /* GUARD: Did the API return an error response key? */
                 sendError("There was an error with your request:\(error)")
                 return
             }
             
             /* GUARD: Did we get a successful 2XX response? */
             guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
-                // TODO: Display Error "Your request returned a status code other than 2xx!"
                 sendError("Your request returned a status code other than 2xx")
                 return
             }
             
             /* GUARD: Was there any data returned ? */
             guard var data = data else {
-                // TODO: Display Error "No data was returned by the request!"
-                print("No data returned!")
+                sendError("No data returned!")
                 return
             }
             
@@ -83,7 +79,6 @@ class APIClient {
             }
             
             /* 5. Parse the data and use the data (in the completion handler) */
-            print(NSString(data: data, encoding: NSUTF8StringEncoding))
             self.parseDataWithCompletionHandler(data, completionHandlerForParsedData: completionHandlerForGET)
         }
         /* 6. Start the request */

@@ -101,10 +101,10 @@
 			children = (
 				3AA8D5E61CDC199C00FAF1B4 /* LoginViewController.swift */,
 				D2FF30EC1CE107EF0029606D /* OTMTabBarController.swift */,
-				3AA8D6091CDC5E8500FAF1B4 /* LinkPromptViewController.swift */,
+				3AA8D60C1CDC5E8500FAF1B4 /* MapViewController.swift */,
 				3AA8D60A1CDC5E8500FAF1B4 /* ListViewController.swift */,
 				3AA8D60B1CDC5E8500FAF1B4 /* LocationPromptViewController.swift */,
-				3AA8D60C1CDC5E8500FAF1B4 /* MapViewController.swift */,
+				3AA8D6091CDC5E8500FAF1B4 /* LinkPromptViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
