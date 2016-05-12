@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import FBSDKLoginKit
 
 // MARK: - UdacityClient: NSObject 
 
@@ -29,10 +29,52 @@ class UdacityClient: NSObject {
         struct Singleton {
             static var sharedInstance = UdacityClient()
         }
+        
         return Singleton.sharedInstance
     }
     
-    // MARK: - Authenticate
+    
+    // MARK: - Authenticate with Facebook Credentials
+    func authenticateWithFacebook(completionHandlerForAuth: (success: Bool, errorString: String?) -> Void) {
+        
+        // Build JSON body for Facebook
+        let jsonBody = "{\"\(FacebookJSONBodyKeys.FacebookMobile)\": {\"\(FacebookJSONBodyKeys.AccessToken)\": \"\(FBSDKAccessToken.currentAccessToken().tokenString)\"}}"
+        
+        // Build HTTP headers
+        let headers = [HTTPHeaderKeys.Accept: HTTPHeaderValues.ApplicationJSON, HTTPHeaderKeys.ContentType: HTTPHeaderValues.ApplicationJSON]
+        
+        // Build request
+        guard let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.POST, method: Methods.AuthenticationSession, jsonBody: jsonBody, headers: headers, parameters: nil, clientType: Constants.ClientType) else {
+            completionHandlerForAuth(success: false, errorString: "Request could not be processed.")
+            return
+        }
+        
+        // Get session ID
+        getSessionID(request) { (success, userKey, sessionID, errorString) in
+            if success {
+                if let userKey = userKey, sessionID = sessionID {
+                    // Store the sessionID and userKey upon success!
+                    self.sessionID = sessionID
+                    self.userKey = Int(userKey)
+                    
+                    // Get user name
+                    self.getStudentDetails() { (success, firstName, lastName, errorString) in
+                        if success {
+                            // Create and store student
+                            if let firstName = firstName, let lastName = lastName {
+                                OTMDataSource.sharedDataSource().student = Student(firstName: firstName, lastName: lastName, uniqueKey: userKey)
+                            }
+                        }
+                        completionHandlerForAuth(success: success, errorString: errorString)
+                    }
+                }
+            } else {
+                completionHandlerForAuth(success: success, errorString: errorString)
+            }
+        }
+    }
+    
+    // MARK: - Authenticate with Udacity Credentials
     func authenticateWithUdacity(username: String, password: String, completionHandlerForAuth: (success: Bool, errorString: String?) -> Void) {
         
         // Build JSON body

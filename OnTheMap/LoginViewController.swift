@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import FBSDKCoreKit
+import FBSDKLoginKit
+
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
 
@@ -14,6 +17,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet var passwordField: UITextField!
     @IBOutlet var activityView: UIActivityIndicatorView!
     
+    //@IBOutlet var facebookLoginButton: FBSDKLoginButton!
+    
+    @IBOutlet var facebookLoginButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         usernameField.delegate = self
@@ -103,6 +109,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
+    // Hide keyboard when touch outside of textfield
+    
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?){
+        view.endEditing(true)
+        super.touchesBegan(touches, withEvent: event)
+    }
+    
     // MARK: Display Alert
     
     private func displayAlert(message: String, completionHandler: ((UIAlertAction) -> Void)? = nil) {
@@ -114,5 +127,53 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
 }
+
+// MARK: - Facebook Login
+
+extension LoginViewController {
+    
+    @IBAction func loginWithFacebook(sender: AnyObject) {
+        // Disable UI
+        setUIenabled(false)
+        
+        // Login through Facebook
+        FBSDKLoginManager().logInWithReadPermissions(["public_profile"]) { (result, error) in
+            
+            // Check for error
+            if error != nil {
+                // Re-enable UI
+                self.setUIenabled(true)
+                
+                self.displayAlert("Error logging in through Facebook.")
+                
+            } else if result.isCancelled {
+                // Re-enable UI
+                self.setUIenabled(true)
+                
+                self.displayAlert("Cancelled Facebook Login.")
+                
+            } else {
+                
+                /* GUARD: Was a token received? */
+                print(FBSDKAccessToken.currentAccessToken().tokenString)
+                
+                UdacityClient.sharedInstance().authenticateWithFacebook({ (success, errorString) in
+                    // Re-enable UI
+                    self.setUIenabled(true)
+                    
+                    // Check for success case
+                    if success {
+                        self.completeLogin()
+                    } else {
+                        self.displayAlert("Could not authenticate with Udacity")
+                    }
+                    
+                })
+            }
+        }
+    }
+
+}
+
 
 

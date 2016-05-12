@@ -53,7 +53,11 @@ extension UdacityClient {
         static let Username = "username"
         static let Password = "password"
     }
-    
+    // MARK: - Facebook JSON Body Keys
+    struct FacebookJSONBodyKeys {
+        static let FacebookMobile = "facebook_mobile"
+        static let AccessToken = "access_token"
+    }
     // MARK: - JSON Response Keys
     struct JSONResponseKeys {
         

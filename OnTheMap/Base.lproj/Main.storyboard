@@ -87,6 +87,9 @@
                                         <state key="normal" title="Log in with Facebook">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="loginWithFacebook:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vbz-m8-6eK"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -108,6 +111,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="activityView" destination="9a5-qv-5qH" id="xYj-Lj-FWc"/>
+                        <outlet property="facebookLoginButton" destination="Vfo-EH-FlT" id="WYR-RD-14l"/>
                         <outlet property="passwordField" destination="Ucy-aA-rOv" id="q0g-CL-vTM"/>
                         <outlet property="usernameField" destination="HFq-N5-MLW" id="w1m-jt-VyT"/>
                     </connections>
