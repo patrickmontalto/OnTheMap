@@ -31,7 +31,10 @@ class ParseClient: NSObject {
         let headers = [HTTPHeaderKeys.ParseApplicationID: Constants.ApplicationID, HTTPHeaderKeys.ParseAPIKey: Constants.APIKey]
         
         // Build request
-        let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.GET, method: Methods.StudentLocation, jsonBody: nil, headers: headers, parameters: nil, clientType: Constants.ClientType)
+        guard let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.GET, method: Methods.StudentLocation, jsonBody: nil, headers: headers, parameters: nil, clientType: Constants.ClientType) else {
+            completionHandlerForLocations(success: false, errorString: "Request could not be processed.")
+            return
+        }
         
         // Get locations
         getLocations(request) { (success, locations, errorString) -> Void in
@@ -60,7 +63,10 @@ class ParseClient: NSObject {
         let jsonBody = "{\"\(JSONKeys.UniqueKey)\": \"\(uniqueKey)\", \"\(JSONKeys.FirstName)\": \"\(firstName)\", \"\(JSONKeys.LastName)\": \"\(lastName)\",\"\(JSONKeys.MapString)\": \"\(mapString)\", \"\(JSONKeys.MediaURL)\": \"\(mediaURL)\",\"\(JSONKeys.Latitude)\": \(latitude), \"\(JSONKeys.Longitude)\": \(longitude)}"
         
         // Build request
-        let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.POST, method: Methods.StudentLocation, jsonBody: jsonBody, headers: headers, parameters: nil, clientType: Constants.ClientType)
+        guard let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.POST, method: Methods.StudentLocation, jsonBody: jsonBody, headers: headers, parameters: nil, clientType: Constants.ClientType) else {
+            completionHandlerForSubmitLocation(success: false, errorString: "Request could not be processed.")
+            return
+        }
         
         // POST location
         postLocation(request) { (success, errorString) in
@@ -84,10 +90,11 @@ class ParseClient: NSObject {
         let jsonBody = "{\"\(JSONKeys.UniqueKey)\": \"\(uniqueKey)\", \"\(JSONKeys.FirstName)\": \"\(firstName)\", \"\(JSONKeys.LastName)\": \"\(lastName)\",\"\(JSONKeys.MapString)\": \"\(mapString)\", \"\(JSONKeys.MediaURL)\": \"\(mediaURL)\",\"\(JSONKeys.Latitude)\": \(latitude), \"\(JSONKeys.Longitude)\": \(longitude)}"
         
         // Build request
-        let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.PUT, method: Methods.StudentLocation + "/\(objectID)", jsonBody: jsonBody, headers: headers, parameters: nil, clientType: Constants.ClientType)
-        /* DEBUGGING */
-        print(request.URL!)
-        
+        guard let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.PUT, method: Methods.StudentLocation + "/\(objectID)", jsonBody: jsonBody, headers: headers, parameters: nil, clientType: Constants.ClientType) else {
+            completionHandlerForUpdateLocation(success: false, errorString: "Request could not be processed.")
+            return
+        }
+
         // PUT Location
         putLocation(request) { (success, errorString) -> Void in
             completionHandlerForUpdateLocation(success: success, errorString: errorString)
@@ -196,5 +203,6 @@ class ParseClient: NSObject {
             completionHandlerForGetLocations(success: true, locations: locations, errorString: nil)
         }
     }
+    
     
 }

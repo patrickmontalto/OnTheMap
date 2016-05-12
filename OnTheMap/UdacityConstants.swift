@@ -20,6 +20,7 @@ extension UdacityClient {
         static let ApiScheme = "https"
         static let ApiHost = "www.udacity.com"
         static let ApiPath = "/api"
+        static let SignupURL = "https://www.udacity.com/account/auth#!/signup"
         
         static let ClientType = APIClient.Constants.UdacityClient
     }

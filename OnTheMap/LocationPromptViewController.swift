@@ -26,14 +26,12 @@ class LocationPromptViewController: UIViewController, UITextFieldDelegate {
         super.viewWillAppear(animated)
         // set Navbar colors
         setNavbarColors(self, barColor: OTMConstants.GreyColor, textColor: OTMConstants.BlueColor)
-
     }
     
     @IBAction func cancelPrompt(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    // TODO: Implement #findOnMap()
     @IBAction func findOnMap(sender: AnyObject) {
         // 1. check to see if locationTextView has value
         /* GUARD: Does locationTextView have a value ? */

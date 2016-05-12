@@ -25,6 +25,14 @@ class OTMDataSource {
     }
     
     func getStudentLocationData() {
+        // Check for network connection
+        if Reachability.isConnectedToNetwork() == false {
+            self.sendNotification("noNetworkConnectionDetected")
+            return
+        }
+        // Notify the application that the student locations will begin updating
+        self.sendNotification("studentLocationsUpdating")
+        
         ParseClient.sharedInstance().retrieveLocations { (success, errorString) in
             if success {
                 self.sendNotification("studentLocationsSuccess")

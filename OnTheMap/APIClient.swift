@@ -13,15 +13,29 @@ class APIClient {
     // MARK: - Properties
     var session = NSURLSession.sharedSession()
     
+    // MARK: - Check Network
+//    func checkNetworkConnectivity(completionHandler: (notConnected: Bool) -> Void) {
+//        if Reachability.isConnectedToNetwork() == false {
+//            self.sendNotification("noNetworkConnectionDetected")
+//            completionHandler(notConnected: true)
+//        } else {
+//            completionHandler(notConnected: false)
+//        }
+//    }
+    
+    
     // MARK: - Create Request
-    func buildRequestWithHTTPMethod(HTTPMethod: String, method: String, jsonBody: String? = nil, headers: [String:String]? = nil, parameters: [String:AnyObject]?, clientType: String) -> NSURLRequest {
+    func buildRequestWithHTTPMethod(HTTPMethod: String, method: String, jsonBody: String? = nil, headers: [String:String]? = nil, parameters: [String:AnyObject]?, clientType: String) -> NSURLRequest? {
         
         /* 1. Set the parameters so they can be appended to if necessary */
         let methodParameters = parameters
 
+        /* GUARD: Is there a URL from the parameters? */
+        guard let url = URLFromParameters(methodParameters, withPathExtension: method, clientType: clientType) else {
+            return nil
+        }
         /* 2. Build the URL, Configure the request */
-        var request = //NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
-        NSMutableURLRequest(URL: URLFromParameters(methodParameters, withPathExtension: method, clientType: clientType))
+        var request = NSMutableURLRequest(URL: url)
         
         /* 3. Build the method, headers, and body */
         request.HTTPMethod = HTTPMethod
@@ -51,8 +65,14 @@ class APIClient {
             func sendError(error: String) {
                 print(error)
                 let userInfo = [NSLocalizedDescriptionKey : error]
-                completionHandlerForGET(result: nil, error: NSError(domain: "taskForGETMethod", code: 1, userInfo: userInfo))
+                completionHandlerForGET(result: nil, error: NSError(domain: "taskForRequest", code: 1, userInfo: userInfo))
             }
+            // Check connection status
+            if Reachability.isConnectedToNetwork() == false {
+                sendError("No network connection detected.")
+                return
+            }
+            
             
             /* GUARD: Was there an error? */
             guard (error == nil) else {
@@ -90,7 +110,7 @@ class APIClient {
     // MARK: Helpers
     
     // create a URL from parameters
-    private func URLFromParameters(parameters: [String:AnyObject]?, withPathExtension: String? = nil, clientType: String) -> NSURL {
+    private func URLFromParameters(parameters: [String:AnyObject]?, withPathExtension: String? = nil, clientType: String) -> NSURL? {
         // check for UdacityClient type
         if clientType == APIClient.Constants.UdacityClient {
             
@@ -111,6 +131,7 @@ class APIClient {
             
         // check for ParseClient type
         } else if clientType == APIClient.Constants.ParseClient {
+            
             let components = NSURLComponents()
             components.scheme = ParseClient.Constants.ApiScheme
             components.host = ParseClient.Constants.ApiHost
@@ -123,14 +144,11 @@ class APIClient {
                     components.queryItems!.append(queryItem)
                 }
             }
-            
             return components.URL!
-            
         }
         
-        // TODO: display error for wrong client type sent to function
-        return NSURL()
-    
+        // Return nil if wrong clientType passed as arg
+        return nil
     }
     
     private func parseDataWithCompletionHandler(data: NSData, completionHandlerForParsedData: (result: AnyObject!, error: NSError?) -> Void) {
@@ -140,11 +158,11 @@ class APIClient {
         do {
             parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
         } catch {
-            // TODO: Display error "Could not parse the data as JSON: \(data)"
-            // TODO: Call completionHandlerForParsedData with a nil result and an error
+            // Display error
+            let userInfo = [NSLocalizedDescriptionKey: "Could not parse data as JSON: \(data)."]
+            completionHandlerForParsedData(result: parsedResult, error: NSError(domain: "parseDataWithCompletionHandler", code: 1, userInfo: userInfo))
         }
         
         completionHandlerForParsedData(result: parsedResult, error: nil)
     }
-
 }

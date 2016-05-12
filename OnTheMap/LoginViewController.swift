@@ -12,6 +12,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet var usernameField: UITextField!
     @IBOutlet var passwordField: UITextField!
+    @IBOutlet var activityView: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,18 +26,40 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     @IBAction func loginPressed(sender: AnyObject) {
+        // Make UI inactive and show activity indicator
+        setUIenabled(false)
         /* GUARD: is the username entered in? */
         guard let username = usernameField.text, let password = passwordField.text where username != "" && password != "" else {
+            setUIenabled(true)
             alertForInvalidCredentials()
             return
         }
+        
         // Authenticate
         UdacityClient.sharedInstance().authenticateWithUdacity(username, password: password) { (success, errorString) -> Void in
+            
+            // Re-enable UI
+            self.setUIenabled(true)
+            
             if success {
                 self.completeLogin()
-            } else {
+            } else if Reachability.isConnectedToNetwork(){
                 self.alertForInvalidCredentials()
+            } else {
+                self.displayAlert("No network connection detected.")
             }
+        }
+    }
+    @IBAction func signUpPressed(sender: AnyObject) {
+        // Check connection
+        if Reachability.isConnectedToNetwork() {
+            if let signupURL = NSURL(string: UdacityClient.Constants.SignupURL) {
+                UIApplication.sharedApplication().openURL(signupURL)
+            } else {
+                displayAlert("Error accessing Udacity signup page.")
+            }
+        } else {
+            displayAlert("No network connection detected.")
         }
     }
     
@@ -47,6 +70,20 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             self.presentViewController(controller, animated: true, completion: nil)})
     }
     
+    // MARK: - Toggle UI Interaction
+    func setUIenabled(enabled: Bool) {
+        performUIUpdatesOnMain {
+            for view in self.view.subviews {
+                view.userInteractionEnabled = enabled
+            }
+            // start or stop activity view
+            if self.activityView.isAnimating() {
+                self.activityView.stopAnimating()
+            } else {
+                self.activityView.startAnimating()
+            }
+        }
+    }
     
     func alertForInvalidCredentials() {
         performUIUpdatesOnMain { 

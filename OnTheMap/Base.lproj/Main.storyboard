@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
@@ -68,6 +68,7 @@
                                         </state>
                                         <connections>
                                             <action selector="loginPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mTK-1X-Skx"/>
+                                            <action selector="signUpPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="z3O-Gx-Qh9"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YyO-Ak-AL3">
@@ -89,17 +90,24 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="9a5-qv-5qH">
+                                <rect key="frame" x="169" y="315" width="37" height="37"/>
+                                <color key="color" red="0.1021232230270462" green="0.20063122191834878" blue="0.55675080128205123" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.63496097795433659" blue="0.31624965964219665" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="QbZ-uX-6Zi" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="66" id="05t-XY-xVQ"/>
+                            <constraint firstItem="9a5-qv-5qH" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="2cg-iu-FGh"/>
                             <constraint firstItem="QbZ-uX-6Zi" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="8Sz-5C-Dfc"/>
                             <constraint firstAttribute="trailingMargin" secondItem="QbZ-uX-6Zi" secondAttribute="trailing" id="SZm-ta-gDr"/>
+                            <constraint firstItem="9a5-qv-5qH" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Ygm-jA-Xhl"/>
                         </constraints>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="activityView" destination="9a5-qv-5qH" id="xYj-Lj-FWc"/>
                         <outlet property="passwordField" destination="Ucy-aA-rOv" id="q0g-CL-vTM"/>
                         <outlet property="usernameField" destination="HFq-N5-MLW" id="w1m-jt-VyT"/>
                     </connections>
@@ -131,10 +139,16 @@
                             </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="qWj-pc-OE9">
+                    <tabBar key="tabBar" contentMode="scaleToFill" translucent="NO" id="qWj-pc-OE9">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
+                                <color key="value" red="0.20784313730000001" green="0.32549019610000002" blue="0.57647058819999997" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </tabBar>
                     <connections>
                         <segue destination="QeX-dp-GnG" kind="relationship" relationship="viewControllers" id="VQJ-Z0-4Hr"/>
@@ -150,11 +164,11 @@
             <objects>
                 <navigationController storyboardIdentifier="OTMNavigationController" id="P2N-rv-j9c" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="uCl-6m-dbs"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="6o8-qO-zal">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="6o8-qO-zal">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.99215686274509807" green="0.56470588235294117" blue="0.25490196078431371" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="barTintColor" red="0.96078431369999995" green="0.95686274510000002" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" red="0.20784313725490197" green="0.32549019607843138" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="barTintColor" red="0.95883367370000006" green="0.95883367370000006" blue="0.95883367370000006" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <connections>
                         <segue destination="J25-Mt-nJX" kind="relationship" relationship="rootViewController" id="Kmz-fG-WPR"/>
@@ -173,27 +187,34 @@
                         <viewControllerLayoutGuide type="bottom" id="bAW-rn-E7I"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="pML-6n-rsj">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="iFy-IJ-JBe">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="iFy-IJ-JBe">
                                 <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                                 <connections>
                                     <outlet property="delegate" destination="QeX-dp-GnG" id="KAW-bX-3lT"/>
                                 </connections>
                             </mapView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="hOh-Lb-ERf">
+                                <rect key="frame" x="282" y="225" width="37" height="37"/>
+                                <color key="color" red="0.102123223" green="0.20063122189999999" blue="0.55675080129999999" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="iFy-IJ-JBe" firstAttribute="leading" secondItem="pML-6n-rsj" secondAttribute="leading" id="0Zr-ca-fM4"/>
+                            <constraint firstItem="hOh-Lb-ERf" firstAttribute="centerY" secondItem="pML-6n-rsj" secondAttribute="centerY" id="D3a-Mo-l7C"/>
                             <constraint firstAttribute="trailing" secondItem="iFy-IJ-JBe" secondAttribute="trailing" id="Ne2-dp-Mw4"/>
                             <constraint firstItem="bAW-rn-E7I" firstAttribute="top" secondItem="iFy-IJ-JBe" secondAttribute="bottom" id="a4Z-vb-f7v"/>
+                            <constraint firstItem="hOh-Lb-ERf" firstAttribute="centerX" secondItem="pML-6n-rsj" secondAttribute="centerX" id="qR4-G5-Fz3"/>
                             <constraint firstItem="iFy-IJ-JBe" firstAttribute="top" secondItem="iAP-dt-Tu6" secondAttribute="bottom" id="sKW-QP-2Bn"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Map" image="map" selectedImage="map" id="WcW-MM-3y0"/>
                     <navigationItem key="navigationItem" id="7s9-Sv-Dm8"/>
                     <connections>
+                        <outlet property="activityView" destination="hOh-Lb-ERf" id="JMs-mt-prU"/>
                         <outlet property="mapView" destination="iFy-IJ-JBe" id="VvX-dd-CNd"/>
                     </connections>
                 </viewController>
@@ -347,12 +368,12 @@
             <objects>
                 <tableViewController id="gqd-o4-974" customClass="ListViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="SBw-Sg-lk1">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StudentLocationCell" textLabel="AAw-R8-i9x" detailTextLabel="NAB-Kt-7YP" imageView="vAR-9b-OAl" style="IBUITableViewCellStyleSubtitle" id="4m0-8G-eI8">
-                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4m0-8G-eI8" id="zDn-uq-RTq">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>

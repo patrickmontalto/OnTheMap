@@ -42,7 +42,10 @@ class UdacityClient: NSObject {
         let headers = [HTTPHeaderKeys.Accept: HTTPHeaderValues.ApplicationJSON, HTTPHeaderKeys.ContentType: HTTPHeaderValues.ApplicationJSON]
 
         // Build request
-        let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.POST, method: Methods.AuthenticationSession, jsonBody: jsonBody, headers: headers, parameters: nil, clientType: Constants.ClientType)
+        guard let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.POST, method: Methods.AuthenticationSession, jsonBody: jsonBody, headers: headers, parameters: nil, clientType: Constants.ClientType) else {
+            completionHandlerForAuth(success: false, errorString: "Request could not be processed.")
+            return
+        }
 
         // Get session ID
         getSessionID(request) { (success, userKey, sessionID, errorString) in
@@ -85,7 +88,10 @@ class UdacityClient: NSObject {
         }
         
         // Build request
-        let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.DELETE, method: Methods.AuthenticationSession, jsonBody: nil, headers: headers, parameters: nil, clientType: Constants.ClientType)
+        guard let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.DELETE, method: Methods.AuthenticationSession, jsonBody: nil, headers: headers, parameters: nil, clientType: Constants.ClientType) else {
+            completionHandler(success: false, errorString: "Request could not be processed.")
+            return
+        }
         
         // Create and start task
         deleteSession(request) { (success, errorString) -> Void in
@@ -136,7 +142,10 @@ class UdacityClient: NSObject {
         let method = Methods.CurrentUserData + "/\(userKey)"
         
         // Build request
-        let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.GET, method: method, jsonBody: nil, headers: nil, parameters: nil, clientType: Constants.ClientType)
+        guard let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.GET, method: method, jsonBody: nil, headers: nil, parameters: nil, clientType: Constants.ClientType) else {
+            completionHandlerForStudentDetails(success: false, firstName: nil, lastName: nil, errorString: "Request could not be processed.")
+            return
+        }
         
         // Make the request
         APIClient().taskForRequest(request, clientType: Constants.ClientType) { (results, error) -> Void in
@@ -183,5 +192,5 @@ class UdacityClient: NSObject {
             completionHandlerForLogout(success: true, errorString: nil)
         }
     }
-    
+
 }

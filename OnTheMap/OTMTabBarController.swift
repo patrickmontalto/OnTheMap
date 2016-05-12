@@ -35,6 +35,13 @@ class OTMTabBarController: UITabBarController {
             displayAlert("Error: Current student not found")
             return
         }
+        
+        // Check network connection
+        if !Reachability.isConnectedToNetwork() {
+            displayAlert("No network connection detected.")
+            return
+        }
+        
         performUIUpdatesOnMain() {
             if student.hasStoredLocation() {
                 self.displayOverwriteAlert(student)
@@ -46,20 +53,37 @@ class OTMTabBarController: UITabBarController {
     
     @IBAction func refreshLocations(sender: AnyObject) {
         // Populate annotations array and update MapView annotations
+        
+        // Check network connection
+        if !Reachability.isConnectedToNetwork() {
+            displayAlert("No network connection detected.")
+            return
+        }
         OTMDataSource.sharedDataSource().getStudentLocationData()
     }
     
     func studentLocationsDidError() {
-        displayAlert("Failed to update student locations.")
+        for viewController in self.childViewControllers {
+            if let mapViewController = viewController as? MapViewController {
+                mapViewController.setUIenabled(true)
+            } else if let listViewController = viewController as? ListViewController {
+                listViewController.setUIenabled(true)
+            }
+        }
+        // Check network connection
+        if Reachability.isConnectedToNetwork(){
+            displayAlert("Failed to update student locations.")
+        } else {
+            displayAlert("No network connection detected.")
+        }
     }
-    
+
     // MARK: Present location prompt
     private func displayLocationPrompt() {
         let studentLocationNavigationController = self.storyboard?.instantiateViewControllerWithIdentifier("StudentLocationNavigationController") as! UINavigationController
         self.presentViewController(studentLocationNavigationController, animated: true, completion: nil)
-//        let locationPromptViewController = self.storyboard?.instantiateViewControllerWithIdentifier("LocationPrompt") as! LocationPromptViewController
-//        self.presentViewController(locationPromptViewController, animated: true, completion: nil)
     }
+    
     // MARK: - Alerts
     
     // MARK: Display Overwrite Confirmation
@@ -84,5 +108,6 @@ class OTMTabBarController: UITabBarController {
             self.presentViewController(alert, animated: true, completion: nil)
         }
     }
+    
 }
 

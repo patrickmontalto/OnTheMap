@@ -16,13 +16,24 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
     
+    @IBOutlet var activityView: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "studentLocationsWillUpdate", name: "studentLocationsUpdating", object: nil)
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "studentLocationsDidUpdate", name: "studentLocationsSuccess", object: nil)
         
         // Populate annotations array and update MapView annotations
+        self.mapView.alpha = 0.3
         OTMDataSource.sharedDataSource().getStudentLocationData()
         
+    }
+    
+    // MARK: - Prepare UI for network request
+    func studentLocationsWillUpdate() {
+        // Disable buttons on tab bar and navbar
+        setUIenabled(false)
     }
     
     // MARK: - Call this function when student locations are refreshed.
@@ -49,10 +60,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             annotations.append(annotation)
         }
 
-        // Once the array is complete, remove old annotations and add new annotations to map:
-        performUIUpdatesOnMain {
+        // Once the array is complete, remove old annotations and add new annotations to map
+        // Need to wait on re-enabling UI...
+        let time = dispatch_time(dispatch_time_t(DISPATCH_TIME_NOW), 1 * Int64(NSEC_PER_SEC))
+        dispatch_after(time, dispatch_get_main_queue()) {
             self.mapView.removeAnnotations(self.mapView.annotations)
             self.mapView.addAnnotations(annotations)
+            
+            self.setUIenabled(true)
         }
     }
     
@@ -70,7 +85,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = true
-            pinView!.pinTintColor = OTMConstants.BlueColor
+            pinView!.pinTintColor = OTMConstants.OrangeColor
             pinView!.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure)
         } else {
             pinView!.annotation = annotation
@@ -93,6 +108,27 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
+    // MARK: Toggle UI Interaction
+    func setUIenabled(enabled: Bool) {
+        performUIUpdatesOnMain {
+            for view in self.view.subviews {
+                view.userInteractionEnabled = enabled
+            }
+            // start or stop activity view
+            if self.activityView.isAnimating() {
+                self.activityView.stopAnimating()
+            } else {
+                self.activityView.startAnimating()
+            }
+            // Show/hide mapView
+            if enabled {
+                self.mapView.alpha = 1.0
+            } else {
+                self.mapView.alpha = 0.3
+            }
+        }
+    }
+
     // MARK: Display Alert
     
     private func displayAlert(message: String, completionHandler: ((UIAlertAction) -> Void)? = nil) {

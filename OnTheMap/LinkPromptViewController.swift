@@ -28,7 +28,7 @@ class LinkPromptViewController: UIViewController, MKMapViewDelegate, UITextField
         setNavbarColors(self, barColor: OTMConstants.BlueColor, textColor: OTMConstants.GreyColor)
     }
     
-    /* TEMPORARY: Listener for backbutton */
+    // TODO: TEMPORARY: Listener for backbutton
     override func willMoveToParentViewController(parent: UIViewController?) {
         if parent == nil {
             setNavbarColors(self.parentViewController!, barColor: OTMConstants.GreyColor, textColor: OTMConstants.BlueColor)
