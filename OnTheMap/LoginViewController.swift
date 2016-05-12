@@ -152,11 +152,7 @@ extension LoginViewController {
                 
                 self.displayAlert("Cancelled Facebook Login.")
                 
-            } else {
-                
-                /* GUARD: Was a token received? */
-                print(FBSDKAccessToken.currentAccessToken().tokenString)
-                
+            } else {                
                 UdacityClient.sharedInstance().authenticateWithFacebook({ (success, errorString) in
                     // Re-enable UI
                     self.setUIenabled(true)
