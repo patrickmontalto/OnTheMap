@@ -25,13 +25,16 @@ class ParseClient: NSObject {
         }
         return Singleton.sharedInstance
     }
-    // MARK: - Retrieve locations
+    // MARK: - Retrieve 100 last student locations
     func retrieveLocations(completionHandlerForLocations: (success: Bool, errorString: String?) -> Void) {
         // Build headers
         let headers = [HTTPHeaderKeys.ParseApplicationID: Constants.ApplicationID, HTTPHeaderKeys.ParseAPIKey: Constants.APIKey]
         
+        // Build parameters
+        let parameters: [String:AnyObject] = [ParameterKeys.Limit:ParameterValues.Limit100, ParameterKeys.Order:ParameterValues.UpdatedAtDesc]
+        
         // Build request
-        guard let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.GET, method: Methods.StudentLocation, jsonBody: nil, headers: headers, parameters: nil, clientType: Constants.ClientType) else {
+        guard let request = APIClient().buildRequestWithHTTPMethod(APIClient.Constants.GET, method: Methods.StudentLocation, jsonBody: nil, headers: headers, parameters: parameters, clientType: Constants.ClientType) else {
             completionHandlerForLocations(success: false, errorString: "Request could not be processed.")
             return
         }
@@ -94,7 +97,7 @@ class ParseClient: NSObject {
             completionHandlerForUpdateLocation(success: false, errorString: "Request could not be processed.")
             return
         }
-
+    
         // PUT Location
         putLocation(request) { (success, errorString) -> Void in
             completionHandlerForUpdateLocation(success: success, errorString: errorString)
@@ -124,7 +127,7 @@ class ParseClient: NSObject {
         APIClient().taskForRequest(request, clientType: Constants.ClientType) { (results, error) -> Void in
             /* Check for error */
             guard error == nil else {
-                completionHandlerForPostLocation(success: false, errorString: "An error occurred updating location.")
+                completionHandlerForPostLocation(success: false, errorString: "An error occurred updating location. Perhaps the URL above is invalid?")
                 return
             }
             /* Check for updatedAt key */
@@ -187,8 +190,9 @@ class ParseClient: NSObject {
                     continue
                 }
                 
-                // Add new location to array of locations
-                let location = Location(latitude: latitude, longitude: longitude, mapString: mapString, mediaURL: mediaURL, objectID: objectID, firstName: firstName, lastName: lastName, uniqueKey: uniqueKey)
+//                // Add new location to array of locations
+//                let location = Location(latitude: latitude, longitude: longitude, mapString: mapString, mediaURL: mediaURL, objectID: objectID, firstName: firstName, lastName: lastName, uniqueKey: uniqueKey)
+                let location = Location(jsonDictionary: location)
                 
                 // Check to see if the current location is that of the current student
                 if let currentStudent = OTMDataSource.sharedDataSource().student where uniqueKey == currentStudent.uniqueKey {

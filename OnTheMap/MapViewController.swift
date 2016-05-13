@@ -101,13 +101,28 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.sharedApplication()
             if let toOpen = view.annotation?.subtitle! {
-                app.openURL(NSURL(string: toOpen)!)
+                let urlString = checkForHTTP(toOpen)
+                if let url = NSURL(string: urlString) {
+                    app.openURL(url)
+                } else {
+                    displayAlert("Unable to open URL")
+                }
             } else {
-                displayAlert("Invalid URL")
+                displayAlert("No URL for student")
             }
         }
     }
     
+    // MARK: Check for HTTP or HTTPS
+    func checkForHTTP(url: String) -> String {
+        let normalizedURL = url.lowercaseString
+        if normalizedURL.beginsWith("http://") || normalizedURL.beginsWith("https://") {
+            return url
+        } else {
+            return "http://\(url)"
+        }
+    }
+   
     // MARK: Toggle UI Interaction
     func setUIenabled(enabled: Bool) {
         performUIUpdatesOnMain {
@@ -128,16 +143,5 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             }
         }
     }
-
-    // MARK: Display Alert
-    
-    private func displayAlert(message: String, completionHandler: ((UIAlertAction) -> Void)? = nil) {
-        dispatch_async(dispatch_get_main_queue()) {
-            let alert = UIAlertController(title: "", message: message, preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: completionHandler))
-            self.presentViewController(alert, animated: true, completion: nil)
-        }
-    }
-
     
 }

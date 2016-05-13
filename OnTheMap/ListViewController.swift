@@ -42,9 +42,12 @@ class ListViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let mediaURLString = OTMDataSource.sharedDataSource().locations[indexPath.row].mediaURL
+        var mediaURLString = OTMDataSource.sharedDataSource().locations[indexPath.row].mediaURL
         
-        if let mediaURL = NSURL(string: mediaURLString) {
+        // Check for http, otherwise, prefix it
+        let urlString = checkForHTTP(mediaURLString)
+        
+        if let mediaURL = NSURL(string: urlString) {
             if UIApplication.sharedApplication().canOpenURL(mediaURL) {
                 UIApplication.sharedApplication().openURL(mediaURL)
             } else {
@@ -66,6 +69,16 @@ class ListViewController: UITableViewController {
             self.setUIenabled(true)
         }
         
+    }
+    
+    // MARK: Check for HTTP or HTTPS
+    func checkForHTTP(url: String) -> String {
+        let normalizedURL = url.lowercaseString
+        if normalizedURL.beginsWith("http://") || normalizedURL.beginsWith("https://") {
+            return url
+        } else {
+            return "http://\(url)"
+        }
     }
     
     // MARK: Configure activityView
@@ -97,16 +110,4 @@ class ListViewController: UITableViewController {
             }
         }
     }
-
-    
-    // MARK: Display Alert
-    
-    private func displayAlert(message: String, completionHandler: ((UIAlertAction) -> Void)? = nil) {
-        dispatch_async(dispatch_get_main_queue()) {
-            let alert = UIAlertController(title: "", message: message, preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: completionHandler))
-            self.presentViewController(alert, animated: true, completion: nil)
-        }
-    }
-    
 }

@@ -56,5 +56,17 @@ extension ParseClient {
         static let UpdatedAt = "updatedAt"
     }
     
+    // MARK: - Parameter Keys
+    struct ParameterKeys {
+        static let Limit = "limit"
+        static let Order = "order"
+    }
+    
+    // MARK: - Parameter Values
+    struct ParameterValues {
+        static let Limit100 = 100
+        static let UpdatedAtDesc = "-updatedAt"
+    }
+    
 
 }

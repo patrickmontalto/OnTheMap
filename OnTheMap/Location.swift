@@ -31,4 +31,19 @@ struct Location {
     var fullName: String {
         return "\(firstName) \(lastName)"
     }
+    
+    // MARK: Custom Init
+    
+    init(jsonDictionary: [String:AnyObject]) {
+        self.longitude = jsonDictionary[ParseClient.JSONKeys.Longitude] as! Double
+        self.latitude = jsonDictionary[ParseClient.JSONKeys.Latitude] as! Double
+        self.mapString = jsonDictionary[ParseClient.JSONKeys.MapString] as! String
+        self.mediaURL = jsonDictionary[ParseClient.JSONKeys.MediaURL] as! String
+        self.objectID = jsonDictionary[ParseClient.JSONKeys.ObjectID] as! String
+        
+        self.firstName = jsonDictionary[ParseClient.JSONKeys.FirstName] as! String
+        self.lastName = jsonDictionary[ParseClient.JSONKeys.LastName] as! String
+        self.uniqueKey = jsonDictionary[ParseClient.JSONKeys.UniqueKey] as! String
+        
+    }
 }

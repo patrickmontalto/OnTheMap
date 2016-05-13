@@ -13,17 +13,6 @@ class APIClient {
     // MARK: - Properties
     var session = NSURLSession.sharedSession()
     
-    // MARK: - Check Network
-//    func checkNetworkConnectivity(completionHandler: (notConnected: Bool) -> Void) {
-//        if Reachability.isConnectedToNetwork() == false {
-//            self.sendNotification("noNetworkConnectionDetected")
-//            completionHandler(notConnected: true)
-//        } else {
-//            completionHandler(notConnected: false)
-//        }
-//    }
-    
-    
     // MARK: - Create Request
     func buildRequestWithHTTPMethod(HTTPMethod: String, method: String, jsonBody: String? = nil, headers: [String:String]? = nil, parameters: [String:AnyObject]?, clientType: String) -> NSURLRequest? {
         
@@ -139,6 +128,7 @@ class APIClient {
             
             // Add parameters if present
             if let parameters = parameters {
+                components.queryItems = [NSURLQueryItem]()
                 for (key, value) in parameters {
                     let queryItem = NSURLQueryItem(name: key, value: "\(value)")
                     components.queryItems!.append(queryItem)

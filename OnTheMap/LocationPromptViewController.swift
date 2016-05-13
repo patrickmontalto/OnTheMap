@@ -93,14 +93,4 @@ class LocationPromptViewController: UIViewController, UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
-    
-    // MARK: Display Alert
-    
-    private func displayAlert(message: String, completionHandler: ((UIAlertAction) -> Void)? = nil) {
-        dispatch_async(dispatch_get_main_queue()) {
-            let alert = UIAlertController(title: "", message: message, preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: completionHandler))
-            self.presentViewController(alert, animated: true, completion: nil)
-        }
-    }
 }

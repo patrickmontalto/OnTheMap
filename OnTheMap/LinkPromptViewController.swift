@@ -28,13 +28,6 @@ class LinkPromptViewController: UIViewController, MKMapViewDelegate, UITextField
         setNavbarColors(self, barColor: OTMConstants.BlueColor, textColor: OTMConstants.GreyColor)
     }
     
-    // TODO: TEMPORARY: Listener for backbutton
-    override func willMoveToParentViewController(parent: UIViewController?) {
-        if parent == nil {
-            setNavbarColors(self.parentViewController!, barColor: OTMConstants.GreyColor, textColor: OTMConstants.BlueColor)
-        }
-    }
-    
     @IBAction func submitStudentLocation(sender: AnyObject) {
         
         /* GUARD: Does the current locationPlacemark have a location? */
@@ -101,16 +94,6 @@ class LinkPromptViewController: UIViewController, MKMapViewDelegate, UITextField
             } else {
                 self.displayAlert(errorString ?? "An error occurred submitting location.")
             }
-        }
-    }
-    
-    // MARK: Display Alert
-    
-    private func displayAlert(message: String, completionHandler: ((UIAlertAction) -> Void)? = nil) {
-        dispatch_async(dispatch_get_main_queue()) {
-            let alert = UIAlertController(title: "", message: message, preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: completionHandler))
-            self.presentingViewController!.presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
         }
     }
 }
