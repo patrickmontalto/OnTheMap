@@ -46,8 +46,8 @@ class ParseClient: NSObject {
                 if let locations = locations {
                     OTMDataSource.sharedDataSource().locations = locations
                 }
-                completionHandlerForLocations(success: success, errorString: errorString)
             }
+            completionHandlerForLocations(success: success, errorString: errorString)
         }
     }
     
